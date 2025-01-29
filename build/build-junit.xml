@@ -21,6 +21,9 @@ SPDX-License-Identifier: Apache-2.0
          https://gitlab.com/sosy-lab/software/java-project-template
     -->
 
+    <property name="test.includes" value="**/*Test.*"/>
+    <property name="test.excludes" value="**/*$*Test.*"/>
+
     <!-- Can be overridden from including file. -->
     <property name="junit.dir" value="junit"/>
 
@@ -57,10 +60,7 @@ SPDX-License-Identifier: Apache-2.0
             <classpath refid="classpath.junit"/>
             <sysproperty key="java.awt.headless" value="true" />
             <batchtest fork="true" todir="${junit.dir}">
-                <fileset dir="${class.dir}">
-                    <include name="**/*Test.*"/>
-                    <exclude name="**/*$*Test.*"/>
-                </fileset>
+                <fileset dir="${class.dir}" includes="${test.includes}" excludes="${test.excludes}"/>
             </batchtest>
         </junit>
         <junitreport todir="${junit.dir}">
@@ -86,10 +86,7 @@ SPDX-License-Identifier: Apache-2.0
                 <classpath refid="classpath.junit"/>
                 <sysproperty key="java.awt.headless" value="true" />
                 <batchtest fork="true" todir="${junit.dir}">
-                    <fileset dir="${class.dir}">
-                        <include name="**/*Test.*"/>
-                        <exclude name="**/*$*Test.*"/>
-                    </fileset>
+                    <fileset dir="${class.dir}" includes="${test.includes}" excludes="${test.excludes}"/>
                 </batchtest>
             </junit>
         </jacoco:coverage>
