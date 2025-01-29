@@ -11,7 +11,17 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <!-- vim: set tabstop=8 shiftwidth=4 expandtab : -->
-<project name="Sosy-Lab Common Library" basedir="." default="build">
+<project name="Sosy-Lab Common Library" basedir="." default="build"
+         xmlns:cover="antlib:com.diffblue.buildsystem.cover.ant">
+
+    <taskdef uri="antlib:com.diffblue.buildsystem.cover.ant"
+             resource="com/diffblue/cover/buildsystem/ant/antlib.xml">
+        <classpath
+                path="/path/to/cover-buildsystem-ant-jar-with-dependencies.jar"/>
+    </taskdef>
+
+    <cover:installListener/>
+
     <!-- Include a file in which all properties can be overridden.
          This file won't get checked in and can be used to change properties
          locally for one machine if necessary. -->
@@ -87,6 +97,45 @@ SPDX-License-Identifier: Apache-2.0
     </target>
 
     <target name="build" depends="-warn-factorypath, build-project, collect-options" description="Build"/>
+    <target name="info" depends="build">
+        <cover:projectModule>
+            <!-- Required for correct presentation of the project in CLI output -->
+            <cover:moduleName>${ant.project.name}</cover:moduleName>
+
+            <!-- Suggested for correct presentation of the project in CLI output -->
+            <cover:version>${ant.version.exact}</cover:version>
+
+            <!-- Required for creating tests -->
+            <cover:location location="${basedir}"/>
+            <cover:classpath>
+                <path refid="classpath"/>
+            </cover:classpath>
+
+            <cover:productionClasses location="${class.dir}"/>
+            <cover:productionSources location="${source.dir}"/>
+
+            <cover:testClasses location="${class.dir}"/>
+            <cover:testSources location="${source.dir}"/>
+
+            <!-- Suggested for creating tests, not mandatory as Cover assumes sensible default values -->
+            <cover:complianceLevel>${source.release}</cover:complianceLevel>
+            <cover:encoding>UTF-8</cover:encoding>
+            <cover:junitReport location="${junit.dir}"/>
+
+            <!-- Required for coverage-reports -->
+            <cover:buildDirectory location="${class.dir}"/>
+            <cover:jacocoReport location="${junit.dir}/coverage.xml"/>
+            <cover:jacocoDestFile location="${junit.dir}/jacoco.exec"/>
+
+            <!-- Suggested for coverage reports, not mandatory as Cover assumes sensible default values -->
+            <cover:jacocoFormats>xml</cover:jacocoFormats>
+
+            <!-- Optional, if there are submodules, specify them here as a list of projectModule configurations -->
+            <cover:submodules/>
+
+        </cover:projectModule>
+    </target>
+
 
     <target name="dist" depends="jar, sources, javadoc-jar" description="Make a distributable release"/>
 

@@ -1,0 +1,90 @@
+meta:
+  version: 1
+  toolName: ant
+
+cmd:
+  windows:
+    - ant
+  linux:
+    - ant
+  macos:
+    - ant
+
+global:
+  flags: ~
+  timeout: PT10M
+  plugins: ~
+
+phase:
+
+  info:
+    goals:
+      - name: ~
+        goal: info
+        flags:
+          - -Dcompile.warn=true
+          - -Derrorprone.disable=true
+
+  launcher: ~
+
+  clean:
+    goals:
+      - name: ~
+        goal: clean
+        flags: ~
+
+  build:
+    goals:
+      - name: ~
+        goal: build
+        flags: ~
+
+  test:
+    timeout: PT60M
+    goals:
+      - name: ~
+        goal: tests
+        flags:
+          - ${DIFFBLUE_TEST_FILTER}
+    filter:
+      default: ~
+      neverDiffblue:
+        - -Dtest.excludes=**/*DiffblueTest.*,**/*$*Test.*
+      onlyDiffblue:
+        - -Dtest.includes=**/*DiffblueTest.*
+      named:
+        - -Dtest.includes=**/${DIFFBLUE_TEST_FILE}.java
+
+  coverage:
+    timeout: PT60M
+    goals:
+      - name: ~
+        goal: tests
+        flags:
+          - ${DIFFBLUE_TEST_FILTER}
+    filter:
+      default: ~
+      neverDiffblue:
+        - -Dtest.excludes=**/*DiffblueTest.*,**/*$*Test.*
+      onlyDiffblue:
+        - -Dtest.includes=**/*DiffblueTest.*
+      named:
+        - -Dtest.includes=**/${DIFFBLUE_TEST_FILE}.java
+
+
+  refactor:
+    goals: ~
+
+  validate:
+    goals:
+
+      - name: ~
+        goal: build
+        flags:
+          - -Dcompile.warn=true
+          - -Derrorprone.disable=true
+
+      - name: ~
+        goal: tests
+        flags:
+          - -DskipBuild=true
