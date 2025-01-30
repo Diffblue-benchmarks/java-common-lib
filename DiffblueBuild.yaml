@@ -53,7 +53,7 @@ phase:
       onlyDiffblue:
         - -Dtest.includes=**/*DiffblueTest.*
       named:
-        - -Dtest.includes=**/${DIFFBLUE_TEST_FILE}.java
+        - -Dtest.includes=${DIFFBLUE_TEST_CLASS_REGEX}
 
   coverage:
     timeout: PT60M
